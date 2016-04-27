@@ -27,7 +27,7 @@ public class HotelController {
         List<Hotel> hotelList = null;
 
         try {
-            yamlObj = new Yaml(new Constructor(List.class));
+            yamlObj = new Yaml();
             inputStramObj = new FileInputStream(new File(fileStr));
             hotelList = (List<Hotel>) yamlObj.load(inputStramObj);
         } catch (Exception e) {
@@ -109,9 +109,9 @@ public class HotelController {
      * @return rate value of input rate type of specific hotel
      */
     private int getSpecificRateForHotel(HotelRate hr, String RateType) {
-        Rate weekDayRate = hr.getRateObj().stream().filter(rate -> rate.getRateType().equalsIgnoreCase(RateType)).findFirst().orElse(null);
-        if (weekDayRate != null)
-            return weekDayRate.getRateValue();
+        Rate rateObj = hr.getRateObj().stream().filter(rate -> rate.getRateType().equalsIgnoreCase(RateType)).findFirst().orElse(null);
+        if (rateObj != null)
+            return rateObj.getRateValue();
         else
             return 0;
     }

@@ -36,8 +36,20 @@ public class CustomerController {
         return customerList;
     }
 
+    public Boolean isValidCustomer(List<Customer> customerList, String customerType) {
+        Customer existingCustomer = customerList.stream().filter(customer -> customer.getCustomerType().equalsIgnoreCase(customerType)).findAny().orElse(null);
+        if (existingCustomer != null)
+            return true;
+        else {
+            displayCustomerList(customerList);
+            return false;
+        }
+    }
+
+
     public void displayCustomerList(List<Customer> customerList) {
         if (customerList != null)
+            System.out.println("\nExisting Customer Types Are ::  ");
             customerList.forEach(System.out::println);
     }
 

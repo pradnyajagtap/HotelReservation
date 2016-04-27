@@ -2,3 +2,5 @@
   customerType : Regular
 - !!model.Customer
   customerType : Rewards
+- !!model.Customer
+  customerType : Premium

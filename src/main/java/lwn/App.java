@@ -1,6 +1,8 @@
 package lwn;
 
+import Controller.CustomerController;
 import Controller.HotelController;
+import model.Customer;
 import model.Hotel;
 
 import java.io.IOException;
@@ -19,6 +21,7 @@ public class App {
 
     /**
      * Start Point of application,which accepts user input of customer type and dates to reserve as a string
+     *
      * @param args
      * @throws IOException
      */
@@ -45,6 +48,7 @@ public class App {
 
     /**
      * Check whether input string is in correct format or not and Converts input string to customer Type and reserve dates list
+     *
      * @param inputStr
      */
     void setInput(String inputStr) {
@@ -55,6 +59,9 @@ public class App {
             if (reserveDates == null) {
                 System.out.println("Invalid Date Input...Please Enter Again!!!!!!");
                 getInputFromConsole();
+            } else if (!checkValidCustomerType(customerType)) {
+                System.out.println("\n**** "+customerType+ " Is Invalid Customer Type...Please Enter Again!!!!!!\n");
+                getInputFromConsole();
             }
         } else {
             System.out.println("Invalid Input...Please Enter Again!!!!!!");
@@ -62,8 +69,17 @@ public class App {
         }
     }
 
+    private boolean checkValidCustomerType(String customerType) {
+        CustomerController customerConmtrollerObj = new CustomerController();
+        List<Customer> customerList = customerConmtrollerObj.getCustomerList("customers.yml");
+        return customerConmtrollerObj.isValidCustomer(customerList, customerType);
+
+    }
+
+
     /**
      * Parse and Converts input date string to date list
+     *
      * @param inputDate
      * @return Hashset of reserve dates if date string parsed correctly or else returns null
      */
@@ -84,6 +100,7 @@ public class App {
 
     /**
      * According to customer type and reserve dates, will find cheapest hotel for that user
+     *
      * @return Cheapest Hotel details
      */
     Hotel getCheapestHotel() {
