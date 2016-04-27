@@ -9,24 +9,35 @@
         rateType : WeekDay
         rateValue : 1000
       - !!model.Rate
-            rateType : WeekEnd
-            rateValue : 1500
+        rateType : WeekEnd
+        rateValue : 1500
       - !!model.Rate
-            rateType : Discount
-            rateValue : 500
+        rateType : Discount
+        rateValue : 500
     - !!model.HotelRate
-        customerObj : !!model.Customer {customerType : Rewards}
-        rateObj :
-        - !!model.Rate
-          rateType : WeekDay
-          rateValue : 800
-        - !!model.Rate
-              rateType : WeekEnd
-              rateValue : 1250
-        - !!model.Rate
-              rateType : Discount
-              rateValue : 400
-
+      customerObj : !!model.Customer {customerType : Rewards}
+      rateObj :
+      - !!model.Rate
+        rateType : WeekDay
+        rateValue : 800
+      - !!model.Rate
+        rateType : WeekEnd
+        rateValue : 1250
+      - !!model.Rate
+        rateType : Discount
+        rateValue : 400
+    - !!model.HotelRate
+      customerObj : !!model.Customer {customerType : Premium}
+      rateObj :
+      - !!model.Rate
+        rateType : WeekDay
+        rateValue : 1000
+      - !!model.Rate
+        rateType : WeekEnd
+        rateValue : 1000
+      - !!model.Rate
+        rateType : Discount
+        rateValue : 500
 - !!model.Hotel
   hotelRating : 4
   hotelName : SWN Deluxe Hotel
@@ -38,25 +49,35 @@
          rateType : WeekDay
          rateValue : 2000
        - !!model.Rate
-             rateType : WeekEnd
-             rateValue : 1500
+         rateType : WeekEnd
+         rateValue : 1500
        - !!model.Rate
-             rateType : Discount
-             rateValue : 1000
+         rateType : Discount
+         rateValue : 1000
      - !!model.HotelRate
-         customerObj : !!model.Customer {customerType : Rewards}
-         rateObj :
-         - !!model.Rate
-           rateType : WeekDay
-           rateValue : 1500
-         - !!model.Rate
-               rateType : WeekEnd
-               rateValue : 1200
-         - !!model.Rate
-               rateType : Discount
-               rateValue : 800
-
-
+       customerObj : !!model.Customer {customerType : Rewards}
+       rateObj :
+       - !!model.Rate
+         rateType : WeekDay
+         rateValue : 1500
+       - !!model.Rate
+         rateType : WeekEnd
+         rateValue : 1200
+       - !!model.Rate
+         rateType : Discount
+         rateValue : 800
+     - !!model.HotelRate
+       customerObj : !!model.Customer {customerType : Premium}
+       rateObj :
+       - !!model.Rate
+         rateType : WeekDay
+         rateValue : 1000
+       - !!model.Rate
+         rateType : WeekEnd
+         rateValue : 1000
+       - !!model.Rate
+         rateType : Discount
+         rateValue : 500
 - !!model.Hotel
   hotelRating : 5
   hotelName : SWN Executive Hotel
@@ -68,11 +89,11 @@
          rateType : WeekDay
          rateValue : 3000
        - !!model.Rate
-             rateType : WeekEnd
-             rateValue : 2500
+         rateType : WeekEnd
+         rateValue : 2500
        - !!model.Rate
-             rateType : Discount
-             rateValue : 1500
+         rateType : Discount
+         rateValue : 1500
      - !!model.HotelRate
          customerObj : !!model.Customer {customerType : Rewards}
          rateObj :
@@ -80,8 +101,20 @@
            rateType : WeekDay
            rateValue : 2500
          - !!model.Rate
-               rateType : WeekEnd
-               rateValue : 2200
+           rateType : WeekEnd
+           rateValue : 2200
          - !!model.Rate
-               rateType : Discount
-               rateValue : 1200
+           rateType : Discount
+           rateValue : 1200
+     - !!model.HotelRate
+       customerObj : !!model.Customer {customerType : Premium}
+       rateObj :
+       - !!model.Rate
+         rateType : WeekDay
+         rateValue : 1000
+       - !!model.Rate
+         rateType : WeekEnd
+         rateValue : 1000
+       - !!model.Rate
+         rateType : Discount
+         rateValue : 500

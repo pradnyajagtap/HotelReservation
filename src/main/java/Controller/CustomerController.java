@@ -50,7 +50,7 @@ public class CustomerController {
     public void displayCustomerList(List<Customer> customerList) {
         if (customerList != null)
             System.out.println("\nExisting Customer Types Are ::  ");
-            customerList.forEach(System.out::println);
+        customerList.forEach(System.out::println);
     }
 
 }

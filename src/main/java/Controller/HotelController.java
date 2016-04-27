@@ -5,7 +5,6 @@ import model.Hotel;
 import model.HotelRate;
 import model.Rate;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +16,7 @@ public class HotelController {
 
     /**
      * Read Yaml file and parse it to generate Hotel List
+     *
      * @param fileStr Name of file which contains hotel list details
      * @return Generated Hotel List
      */
@@ -45,6 +45,7 @@ public class HotelController {
 
     /**
      * Displays generated hotel list details
+     *
      * @param hotelList List to display
      */
     public void displayHotelList(List<Hotel> hotelList) {
@@ -57,9 +58,10 @@ public class HotelController {
 
     /**
      * Depending upon the customer - customerType and reserve date list - allDates, it will calculate total rate for each hotel conainting in hotel list - allHotels
+     *
      * @param customerType Ex. Regular,Rewards Etc
-     * @param allDates Hashset of reserve dates
-     * @param allHotels Existing hotel list
+     * @param allDates     Hashset of reserve dates
+     * @param allHotels    Existing hotel list
      * @return Existing hotel list with their respective calculated total rates
      */
     public List<Hotel> setTotalRate(String customerType, HashSet<Date> allDates, List<Hotel> allHotels) {
@@ -84,7 +86,8 @@ public class HotelController {
 
     /**
      * Calculate total rate for input Hotel, for specific customer with input total weekdays count and toal weekends count
-     * @param hotelObj Hotel for which want to calculate total rate
+     *
+     * @param hotelObj     Hotel for which want to calculate total rate
      * @param customerType customer type to get specific rate for that customer
      * @param totalWeekday count of weekdays
      * @param totalWeekend count of weekends
@@ -104,7 +107,8 @@ public class HotelController {
 
     /**
      * From input hotelRate of hotel, will return rate value for input RateType
-     * @param hr all rates of specific hotel
+     *
+     * @param hr       all rates of specific hotel
      * @param RateType string rate type of which you want rate value
      * @return rate value of input rate type of specific hotel
      */
@@ -118,18 +122,19 @@ public class HotelController {
 
     /**
      * Compares the hotels by total rate, to get cheapest hotel, if total rate are same, will return hotel having highest rating
+     *
      * @param hotelList List of all hotels
-     * @return cheapest hotel detials
+     * @return cheapest hotel details
      */
     public Hotel getCheapHotel(List<Hotel> hotelList) {
         Hotel hotelObj = null;
-        final Comparator<Hotel> rateComparator = (o1, o2) ->  {
-            if (o1.getTotalRate() == o2.getTotalRate())
-                return o2.getHotelRating() - o1.getHotelRating();
+        final Comparator<Hotel> rateComparator = (o1, o2) -> {
+            if (o1.getTotalRate() != o2.getTotalRate())
+                return Integer.compare(o1.getTotalRate(), o2.getTotalRate());
             else
-                return o1.getTotalRate() - o2.getTotalRate();
+                return Integer.compare(o2.getHotelRating(), o1.getHotelRating());
         };
-        Optional<Hotel> optionalHotel = hotelList.stream().min(rateComparator);
+        Optional<Hotel> optionalHotel = hotelList.stream().filter(hotel -> hotel.getTotalRate() > 0).min(rateComparator);
         if (optionalHotel.isPresent())
             hotelObj = optionalHotel.get();
         if (hotelObj != null && hotelObj.getTotalRate() != -1)

@@ -49,7 +49,7 @@ public class App {
     /**
      * Check whether input string is in correct format or not and Converts input string to customer Type and reserve dates list
      *
-     * @param inputStr
+     * @param inputStr string containing customer type and reserve dates
      */
     void setInput(String inputStr) {
         String inputArray[] = inputStr.split(":");
@@ -60,7 +60,7 @@ public class App {
                 System.out.println("Invalid Date Input...Please Enter Again!!!!!!");
                 getInputFromConsole();
             } else if (!checkValidCustomerType(customerType)) {
-                System.out.println("\n**** "+customerType+ " Is Invalid Customer Type...Please Enter Again!!!!!!\n");
+                System.out.println("\n**** " + customerType + " Is Invalid Customer Type...Please Enter Again!!!!!!\n");
                 getInputFromConsole();
             }
         } else {
@@ -80,8 +80,8 @@ public class App {
     /**
      * Parse and Converts input date string to date list
      *
-     * @param inputDate
-     * @return Hashset of reserve dates if date string parsed correctly or else returns null
+     * @param inputDate String to be converted in to list Ex.ddMMMyyyy(EEE),ddMMMyyyy(EEE),ddMMMyyyy(EEE)
+     * @return Hash set of reserve dates if date string parsed correctly or else returns null
      */
     private HashSet<Date> getDates(String inputDate) {
         HashSet<Date> dateSet = new HashSet<>();
