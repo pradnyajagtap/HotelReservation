@@ -1,0 +1,4 @@
+- !!model.Customer
+  customerType : Regular
+- !!model.Customer
+  customerType : Rewards

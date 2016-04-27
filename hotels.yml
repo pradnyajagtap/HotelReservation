@@ -1,0 +1,87 @@
+- !!model.Hotel
+  hotelRating : 3
+  hotelName : SWN Star Hotel
+  hotelRate :
+    - !!model.HotelRate
+      customerObj : !!model.Customer {customerType : Regular}
+      rateObj :
+      - !!model.Rate
+        rateType : WeekDay
+        rateValue : 1000
+      - !!model.Rate
+            rateType : WeekEnd
+            rateValue : 1500
+      - !!model.Rate
+            rateType : Discount
+            rateValue : 500
+    - !!model.HotelRate
+        customerObj : !!model.Customer {customerType : Rewards}
+        rateObj :
+        - !!model.Rate
+          rateType : WeekDay
+          rateValue : 800
+        - !!model.Rate
+              rateType : WeekEnd
+              rateValue : 1250
+        - !!model.Rate
+              rateType : Discount
+              rateValue : 400
+
+- !!model.Hotel
+  hotelRating : 4
+  hotelName : SWN Deluxe Hotel
+  hotelRate :
+     - !!model.HotelRate
+       customerObj : !!model.Customer {customerType : Regular}
+       rateObj :
+       - !!model.Rate
+         rateType : WeekDay
+         rateValue : 2000
+       - !!model.Rate
+             rateType : WeekEnd
+             rateValue : 1500
+       - !!model.Rate
+             rateType : Discount
+             rateValue : 1000
+     - !!model.HotelRate
+         customerObj : !!model.Customer {customerType : Rewards}
+         rateObj :
+         - !!model.Rate
+           rateType : WeekDay
+           rateValue : 1500
+         - !!model.Rate
+               rateType : WeekEnd
+               rateValue : 1200
+         - !!model.Rate
+               rateType : Discount
+               rateValue : 800
+
+
+- !!model.Hotel
+  hotelRating : 5
+  hotelName : SWN Executive Hotel
+  hotelRate :
+     - !!model.HotelRate
+       customerObj : !!model.Customer {customerType : Regular}
+       rateObj :
+       - !!model.Rate
+         rateType : WeekDay
+         rateValue : 3000
+       - !!model.Rate
+             rateType : WeekEnd
+             rateValue : 2500
+       - !!model.Rate
+             rateType : Discount
+             rateValue : 1500
+     - !!model.HotelRate
+         customerObj : !!model.Customer {customerType : Rewards}
+         rateObj :
+         - !!model.Rate
+           rateType : WeekDay
+           rateValue : 2500
+         - !!model.Rate
+               rateType : WeekEnd
+               rateValue : 2200
+         - !!model.Rate
+               rateType : Discount
+               rateValue : 1200
