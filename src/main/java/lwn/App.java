@@ -22,13 +22,13 @@ public class App {
     /**
      * Start Point of application,which accepts user input of customer type and dates to reserve as a string
      *
-     * @param args
+     * @param args string array containing input string
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
         App appObj = new App();
         if (args.length > 0) {
-            appObj.setInput(args[0]);
+            appObj.checkInput(args[0]);
         } else {
             appObj.getInputFromConsole();
         }
@@ -43,7 +43,7 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Customer Type and Dates To Reserve [Format **** regular:15Mar2009(sun),14Mar2009(sat) ****]: ");
         String input = scanner.next();
-        setInput(input);
+        checkInput(input);
     }
 
     /**
@@ -51,22 +51,35 @@ public class App {
      *
      * @param inputStr string containing customer type and reserve dates
      */
-    void setInput(String inputStr) {
+    private void checkInput(String inputStr) {
         String inputArray[] = inputStr.split(":");
         if (inputArray.length > 1) {
-            customerType = inputArray[0];
-            reserveDates = getDates(inputArray[1]);
-            if (reserveDates == null) {
+            String inputCustomer = inputArray[0];
+            HashSet<Date> inputDates = getDates(inputArray[1]);
+            if (inputDates == null) {
                 System.out.println("Invalid Date Input...Please Enter Again!!!!!!");
                 getInputFromConsole();
-            } else if (!checkValidCustomerType(customerType)) {
-                System.out.println("\n**** " + customerType + " Is Invalid Customer Type...Please Enter Again!!!!!!\n");
+            } else if (!checkValidCustomerType(inputCustomer)) {
+                System.out.println("\n**** " + inputCustomer + " Is Invalid Customer Type...Please Enter Again!!!!!!\n");
                 getInputFromConsole();
+            } else {
+                setInput(inputCustomer, inputDates);
             }
         } else {
             System.out.println("Invalid Input...Please Enter Again!!!!!!");
             getInputFromConsole();
         }
+    }
+
+    /**
+     * Converts input string to customer Type and reserve dates list
+     *
+     * @param inputCustomer string of customer type
+     * @param inputDates    hashset containing reserve date list
+     */
+    void setInput(String inputCustomer, HashSet<Date> inputDates) {
+        customerType = inputCustomer;
+        reserveDates = inputDates;
     }
 
     private boolean checkValidCustomerType(String customerType) {
@@ -83,7 +96,7 @@ public class App {
      * @param inputDate String to be converted in to list Ex.ddMMMyyyy(EEE),ddMMMyyyy(EEE),ddMMMyyyy(EEE)
      * @return Hash set of reserve dates if date string parsed correctly or else returns null
      */
-    private HashSet<Date> getDates(String inputDate) {
+    HashSet<Date> getDates(String inputDate) {
         HashSet<Date> dateSet = new HashSet<>();
         String dateArray[] = inputDate.split(",");
         SimpleDateFormat formatterObj = new SimpleDateFormat("ddMMMyyyy(EEE)");

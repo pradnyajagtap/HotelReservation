@@ -3,33 +3,42 @@ package lwn;
 import junit.framework.TestCase;
 import model.Hotel;
 
+import java.util.Date;
+import java.util.HashSet;
+
 public class AppTest extends TestCase {
 
     public void testGetCheapestHotel() throws Exception {
-        String inputStr,outputHotelName;
+        String inputCustomer, outputHotelName;
+        HashSet<Date> inputDates;
         App appObj = new App();
-        inputStr= "regular:16Mar2009(mon),17Mar2009(tue),18Mar2009(wed)";
-        appObj.setInput(inputStr);
+        inputCustomer = "regular";
+        inputDates = appObj.getDates("16Mar2009(mon),17Mar2009(tue),18Mar2009(wed)");
+        appObj.setInput(inputCustomer, inputDates);
         outputHotelName = appObj.getCheapestHotel().getHotelName();
         assertEquals("Invalid Ouput", "SWN Star Hotel", outputHotelName);
 
-        inputStr= "Regular:20Mar2009(fri),21Mar2009(sat),22Mar2009(sun)";
-        appObj.setInput(inputStr);
+        inputCustomer = "Regular";
+        inputDates = appObj.getDates("20Mar2009(fri),21Mar2009(sat),22Mar2009(sun)");
+        appObj.setInput(inputCustomer, inputDates);
         outputHotelName = appObj.getCheapestHotel().getHotelName();
         assertEquals("Invalid Ouput", "SWN Star Hotel", outputHotelName);
 
-        inputStr = "Rewards:26Mar2009(thu),27Mar2009(fri),28Mar2009(sat)";
-        appObj.setInput(inputStr);
+        inputCustomer = "Rewards";
+        inputDates = appObj.getDates("26Mar2009(thu),27Mar2009(fri),28Mar2009(sat)");
+        appObj.setInput(inputCustomer, inputDates);
         outputHotelName = appObj.getCheapestHotel().getHotelName();
         assertEquals("Invalid Ouput", "SWN Star Hotel", outputHotelName);
 
-        inputStr = "rewards:15Mar2009(sun),14Mar2009(sat)";
-        appObj.setInput(inputStr);
+        inputCustomer = "rewards";
+        inputDates = appObj.getDates("15Mar2009(sun),14Mar2009(sat)");
+        appObj.setInput(inputCustomer, inputDates);
         outputHotelName = appObj.getCheapestHotel().getHotelName();
         assertEquals("Invalid Ouput", "SWN Deluxe Hotel", outputHotelName);
 
-        inputStr = "non exist customer type:15Mar2009(sun),14Mar2009(sat)";
-        appObj.setInput(inputStr);
+        inputCustomer = "non exist customer type";
+        inputDates = appObj.getDates("15Mar2009(sun),14Mar2009(sat)");
+        appObj.setInput(inputCustomer, inputDates);
         Hotel hotelObj = appObj.getCheapestHotel();
         assertNull(hotelObj);
     }
