@@ -23,19 +23,19 @@ public class HotelController {
     @SuppressWarnings("unchecked")
     public List<Hotel> getHotelList(String fileStr) {
         Yaml yamlObj;
-        InputStream inputStramObj = null;
+        InputStream inputStreamObj = null;
         List<Hotel> hotelList = null;
 
         try {
             yamlObj = new Yaml();
-            inputStramObj = new FileInputStream(new File(fileStr));
-            hotelList = (List<Hotel>) yamlObj.load(inputStramObj);
+            inputStreamObj = new FileInputStream(new File(fileStr));
+            hotelList = (List<Hotel>) yamlObj.load(inputStreamObj);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (inputStramObj != null)
+            if (inputStreamObj != null)
                 try {
-                    inputStramObj.close();
+                    inputStreamObj.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -57,56 +57,71 @@ public class HotelController {
 
 
     /**
-     * Depending upon the customer - customerType and reserve date list - allDates, it will calculate total rate for each hotel conainting in hotel list - allHotels
+     * Depending upon the customer - customerType and reserve date list - allDates, it will calculate total rate for each hotel containing in hotel list - allHotels
      *
      * @param customerType Ex. Regular,Rewards Etc
-     * @param allDates     Hashset of reserve dates
+     * @param allDates     Hash set of reserve dates
      * @param allHotels    Existing hotel list
-     * @return Existing hotel list with their respective calculated total rates
      */
-    public List<Hotel> setTotalRate(String customerType, HashSet<Date> allDates, List<Hotel> allHotels) {
-        int totalWeekday = 0, totalWeekend = 0;
+    public void setTotalRate(String customerType, HashSet<Date> allDates, List<Hotel> allHotels) {
+        HashMap<String, Integer> dateTypeCounts = getCountOfAllDays(allDates);
+        for (Hotel hotelObj : allHotels) {
+            calculateTotalRate(hotelObj, customerType, dateTypeCounts);
+        }
+    }
+
+    private HashMap<String, Integer> getCountOfAllDays(HashSet<Date> allDates) {
+        List<String> dayTypeList = getAllDayTypeOfHotels();
+        HashMap<String, Integer> dateTypeCounts = new HashMap<>();
+        dayTypeList.forEach(dayType -> dateTypeCounts.put(dayType, 0));
         for (Date currentDate : allDates) {
             Calendar c = Calendar.getInstance();
             c.setTime(currentDate);
             int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-            if (dayOfWeek >= Calendar.MONDAY && dayOfWeek <= Calendar.FRIDAY) {
-                totalWeekday++;
+            if (dayOfWeek == Calendar.SUNDAY) {
+                Integer current = dateTypeCounts.get("Discount");
+                dateTypeCounts.put("Discount", current + 1);
+            } else if (dayOfWeek >= Calendar.MONDAY && dayOfWeek <= Calendar.FRIDAY) {
+                Integer current = dateTypeCounts.get("WeekDay");
+                dateTypeCounts.put("WeekDay", current + 1);
             } else {
-                totalWeekend++;
+                Integer current = dateTypeCounts.get("WeekEnd");
+                dateTypeCounts.put("WeekEnd", current + 1);
             }
         }
-        for (Hotel hotelObj : allHotels) {
-            int totalRate = calculateTotalRate(hotelObj, customerType, totalWeekday, totalWeekend);
-            hotelObj.setTotalRate(totalRate);
-        }
-        return allHotels;
+        return dateTypeCounts;
+
+    }
+
+    private List<String> getAllDayTypeOfHotels() {
+        RateTypeController rateTypeControllerObj = new RateTypeController();
+        return rateTypeControllerObj.getRateTypeList("rateTypes.yml");
     }
 
 
     /**
-     * Calculate total rate for input Hotel, for specific customer with input total weekdays count and toal weekends count
+     * Calculate total rate for input Hotel, for specific customer with input total weekdays count and total weekends count
      *
      * @param hotelObj     Hotel for which want to calculate total rate
      * @param customerType customer type to get specific rate for that customer
-     * @param totalWeekday count of weekdays
-     * @param totalWeekend count of weekends
-     * @return Total rate for Hotel for specific customer, if specific customer type not found , will return -1
+     * @param dateTypeCounts Total count of days of particular date types
      */
-    private int calculateTotalRate(Hotel hotelObj, String customerType, int totalWeekday, int totalWeekend) {
-        int weekDayRateValue, weekEndRateValue;
+    private void calculateTotalRate(Hotel hotelObj, String customerType, HashMap<String, Integer> dateTypeCounts) {
         HotelRate hr = hotelObj.getHotelRate().stream().filter(hotelRate -> hotelRate.getCustomerObj().getCustomerType().equalsIgnoreCase(customerType)).findFirst().orElse(null);
         if (hr != null) {
-            weekDayRateValue = getSpecificRateForHotel(hr, "WeekDay");
-            weekEndRateValue = getSpecificRateForHotel(hr, "WeekEnd");
-            return totalWeekday * weekDayRateValue + totalWeekend * weekEndRateValue;
+            dateTypeCounts.forEach((dayType, dayCount) ->
+            {
+                int rateValue = getSpecificRateForHotel(hr, dayType);
+                int newRate = (hotelObj.getTotalRate()) + (rateValue * dayCount);
+                hotelObj.setTotalRate(newRate);
+            });
         } else {
-            return -1;
+            hotelObj.setTotalRate(-1);
         }
     }
 
     /**
-     * From input hotelRate of hotel, will return rate value for input RateType
+     * From input hotelRate of hotel, will return rate value for input string Rate Type
      *
      * @param hr       all rates of specific hotel
      * @param RateType string rate type of which you want rate value

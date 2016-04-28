@@ -4,6 +4,7 @@ import Controller.CustomerController;
 import Controller.HotelController;
 import model.Customer;
 import model.Hotel;
+import model.ReserveHotel;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -15,43 +16,41 @@ import java.util.Scanner;
 
 
 public class App {
-    private String customerType;
-    private HashSet<Date> reserveDates;
-    private Hotel cheapestHotel;
 
     /**
      * Start Point of application,which accepts user input of customer type and dates to reserve as a string
-     *
      * @param args string array containing input string
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
         App appObj = new App();
+        ReserveHotel reserveHotelObj;
         if (args.length > 0) {
-            appObj.checkInput(args[0]);
+            reserveHotelObj = appObj.checkInput(args[0]);
         } else {
-            appObj.getInputFromConsole();
+            reserveHotelObj = appObj.getInputFromConsole();
         }
-        appObj.getCheapestHotel();
-        appObj.displayResult();
+        appObj.getCheapestHotel(reserveHotelObj);
+        appObj.displayResult(reserveHotelObj);
     }
 
     /**
-     * Gets input from user using scanner
+     *  Gets input from user using scanner object and returns input in the form of Reserve Hotel object
+     * @return Input in format of reserve hotel object
      */
-    private void getInputFromConsole() {
+    private ReserveHotel getInputFromConsole() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Customer Type and Dates To Reserve [Format **** regular:15Mar2009(sun),14Mar2009(sat) ****]: ");
         String input = scanner.next();
-        checkInput(input);
+        return checkInput(input);
     }
 
     /**
      * Check whether input string is in correct format or not and Converts input string to customer Type and reserve dates list
-     *
      * @param inputStr string containing customer type and reserve dates
+     * @return Input in format of reserve hotel object
      */
-    private void checkInput(String inputStr) {
+    private ReserveHotel checkInput(String inputStr) {
         String inputArray[] = inputStr.split(":");
         if (inputArray.length > 1) {
             String inputCustomer = inputArray[0];
@@ -63,36 +62,41 @@ public class App {
                 System.out.println("\n**** " + inputCustomer + " Is Invalid Customer Type...Please Enter Again!!!!!!\n");
                 getInputFromConsole();
             } else {
-                setInput(inputCustomer, inputDates);
+                return setInput(inputCustomer, inputDates);
             }
         } else {
             System.out.println("Invalid Input...Please Enter Again!!!!!!");
             getInputFromConsole();
         }
+        return null;
     }
 
     /**
-     * Converts input string to customer Type and reserve dates list
-     *
-     * @param inputCustomer string of customer type
-     * @param inputDates    hashset containing reserve date list
+     * Create reserve hotel object using input customer Type and reserve dates list
+     *  @param inputCustomer string of customer type
+     * @param inputDates  hash set containing reserve date list
+     * @return Created reserve hotel object
      */
-    void setInput(String inputCustomer, HashSet<Date> inputDates) {
-        customerType = inputCustomer;
-        reserveDates = inputDates;
+    ReserveHotel setInput(String inputCustomer, HashSet<Date> inputDates) {
+        return (new ReserveHotel(inputCustomer, inputDates));
     }
 
+    /**
+     * Check whether user entered customer type in valid or not
+     *
+     * @param customerType String containing customer type to check
+     * @return True if customer type is valid or else False
+     */
     private boolean checkValidCustomerType(String customerType) {
-        CustomerController customerConmtrollerObj = new CustomerController();
-        List<Customer> customerList = customerConmtrollerObj.getCustomerList("customers.yml");
-        return customerConmtrollerObj.isValidCustomer(customerList, customerType);
+        CustomerController customerControllerObj = new CustomerController();
+        List<Customer> customerList = customerControllerObj.getCustomerList("customers.yml");
+        return customerControllerObj.isValidCustomer(customerList, customerType);
 
     }
 
 
     /**
      * Parse and Converts input date string to date list
-     *
      * @param inputDate String to be converted in to list Ex.ddMMMyyyy(EEE),ddMMMyyyy(EEE),ddMMMyyyy(EEE)
      * @return Hash set of reserve dates if date string parsed correctly or else returns null
      */
@@ -112,27 +116,27 @@ public class App {
     }
 
     /**
-     * According to customer type and reserve dates, will find cheapest hotel for that user
-     *
-     * @return Cheapest Hotel details
+     * According to customer type and reserve dates, will find cheapest hotel for that ReserveHotel object
+     * @param reserveHotelObj Details for which want to find cheapest detail
      */
-    Hotel getCheapestHotel() {
-        if (reserveDates != null) {
+    void getCheapestHotel(ReserveHotel reserveHotelObj) {
+        if (reserveHotelObj.getReserveDates() != null) {
             HotelController hotelControllerObj = new HotelController();
             List<Hotel> hotelList = hotelControllerObj.getHotelList("hotels.yml");
-            hotelControllerObj.setTotalRate(customerType, reserveDates, hotelList);
+            hotelControllerObj.setTotalRate(reserveHotelObj.getCustomerType(), reserveHotelObj.getReserveDates(), hotelList);
             hotelControllerObj.displayHotelList(hotelList);
-            cheapestHotel = hotelControllerObj.getCheapHotel(hotelList);
+            reserveHotelObj.setCheapestHotel(hotelControllerObj.getCheapHotel(hotelList));
         }
-        return cheapestHotel;
     }
 
     /**
-     * Displays cheapest hotel details
+     *  Displays cheapest hotel details of input ReserveHotel object
+     * @param reserveHotelObj Input of reserve hotel for which want to display cheapest hotel details
      */
-    private void displayResult() {
-        System.out.println("\n***For Customer : " + customerType);
-        System.out.println("***For dates : " + reserveDates);
+    private void displayResult(ReserveHotel reserveHotelObj) {
+        System.out.println("\n***For Customer : " + reserveHotelObj.getCustomerType());
+        System.out.println("***For dates : " + reserveHotelObj.getReserveDates());
+        Hotel cheapestHotel = reserveHotelObj.getCheapestHotel();
         if (cheapestHotel != null)
             System.out.println("***Cheapest Hotel Details Are : " + cheapestHotel);
         else

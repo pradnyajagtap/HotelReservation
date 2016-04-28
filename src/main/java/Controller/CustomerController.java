@@ -16,19 +16,19 @@ public class CustomerController {
     @SuppressWarnings("unchecked")
     public List<Customer> getCustomerList(String fileStr) {
         Yaml yamlObj;
-        InputStream inputStramObj = null;
+        InputStream inputStreamObj = null;
         List<Customer> customerList = null;
 
         try {
             yamlObj = new Yaml(new Constructor(List.class));
-            inputStramObj = new FileInputStream(new File(fileStr));
-            customerList = (List<Customer>) yamlObj.load(inputStramObj);
+            inputStreamObj = new FileInputStream(new File(fileStr));
+            customerList = (List<Customer>) yamlObj.load(inputStreamObj);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (inputStramObj != null)
+            if (inputStreamObj != null)
                 try {
-                    inputStramObj.close();
+                    inputStreamObj.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -46,11 +46,11 @@ public class CustomerController {
         }
     }
 
-
-    public void displayCustomerList(List<Customer> customerList) {
+    private void displayCustomerList(List<Customer> customerList) {
         if (customerList != null)
             System.out.println("\nExisting Customer Types Are ::  ");
-        customerList.forEach(System.out::println);
+        if (customerList != null)
+            customerList.forEach(System.out::println);
     }
 
 }

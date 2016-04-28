@@ -1,10 +1,8 @@
 package model;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
-public class Hotel{
+public class Hotel {
     private int hotelRating;
     private String hotelName;
     private List<HotelRate> hotelRate;
